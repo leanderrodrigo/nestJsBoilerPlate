@@ -1,0 +1,27 @@
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: api-boilerplate
+#   namespace: people-product-stg
+#   labels:
+#     k8s-app: "api-boilerplate"
+# status:
+#   loadBalancer:
+#     ingress:
+#       - ip: 51.105.226.184
+# spec:
+#   tls:
+#     - hosts:
+#         - dev.opr.ab-inbev.com
+#       secretName: opr-tls
+#   rules:
+#     - host: dev.opr.ab-inbev.com
+#       http:
+#         paths:
+#           - path: /api/boilerplate/*
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: api-boilerplate
+#                 port:
+#                   number: 80

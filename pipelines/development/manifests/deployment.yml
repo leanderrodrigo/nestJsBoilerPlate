@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: "people-product-dev"
+  name: "api-boilerplate"
+  labels:
+    k8s-app: "api-boilerplate" 
+spec:
+  selector:
+    matchLabels:
+      k8s-app: "api-boilerplate"
+  replicas: 1
+  template:
+    metadata:
+     labels:
+      k8s-app: "api-boilerplate"
+    spec:
+      containers:
+        - name: "api-boilerplate"
+          image: peopleproductsacr.azurecr.io/api-boilerplate
+          ports:
+          - containerPort: 80
+          env:
+            - name: DB_HOST
+              value: people-api-database-host@azurekeyvault
+            - name: DB_USER
+              value: people-api-database-user@azurekeyvault
+            - name: DB_PASSWORD
+              value: people-api-database-password@azurekeyvault
+            - name: DB_NAME
+              value: people-api-database-dbname@azurekeyvault
+            - name: DB_SCHEMA
+              value: people-api-database-schema@azurekeyvault
+            - name: JWT_SECRET
+              value: secretjwt@azurekeyvault
+          volumeMounts:
+          - name: token
+            mountPath: "var/run/secrets/kubernetes.io/serviceaccount/"
+            readOnly: true
+      imagePullSecrets:
+        - name: acr-registry
+      serviceAccountName: service-account-people-produts
+      volumes:
+        - name: token
+          secret:
+            secretName: service-account-people-produts-token-x4l7l
